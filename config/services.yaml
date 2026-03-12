@@ -1,0 +1,23 @@
+parameters:
+  app.upload_dir: '%kernel.project_dir%/public/uploads/students'
+  app.upload_max_size: '%env(int:UPLOAD_MAX_SIZE)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    bind:
+      string $uploadDir: '%app.upload_dir%'
+      int $uploadMaxSize: '%app.upload_max_size%'
+      bool $debug: '%kernel.debug%'
+
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+
+  App\EventListener\ApiExceptionListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }
